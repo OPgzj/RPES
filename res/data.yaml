@@ -1,0 +1,6 @@
+train: data/soybean2_1280pix/train/images
+val: data/soybean2_1280pix/valid/images
+test: data/soybean2_1280pix/test/images
+
+nc: 2
+names: ['cracked', 'non-cracked']

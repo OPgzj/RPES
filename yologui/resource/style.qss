@@ -1,0 +1,61 @@
+QMainWindow {
+    background-color: #e6e6e6;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+QPushButton {
+    font-size: 13px;
+    font-weight: bold;
+    border: 3px solid #a2a09c;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: #e0ddd7;
+    color: #1f1b13;
+}
+
+QPushButton:hover {
+    background-color: #989691;
+}
+
+QLabel {
+    font-size: 16px;
+    font-weight: bold;
+    border: 3px solid #ebebeb;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: #e4e4e4;
+    color: #1f1b13;
+}
+
+QWidget#page1, QWidget#page2 {
+    background-color: rgb(230, 230, 230);
+}
+
+QToolBox {
+    border: none; /* 如果需要去除默认边框 */
+    margin: 20px; /* 这将设置外边距，但请注意这样可能不会生效，取决于QToolBox的实现 */
+}
+
+QToolBox::tab {
+    background-color: #d5d5d5;  /* 设置背景颜色 */
+    border: 2px solid #585858;  /* 设置边框 */
+    border-radius: 10px;  /* 边框圆角 */
+    padding: 25px;  /* 内边距 */
+    color: #000000;  /* 字体颜色 */
+    font-size: 18px;  /* 字体大小 */
+    font-weight: bold;  /* 字体粗细 */
+    text-align: center;
+}
+
+QToolBox::tab:selected { /* 设置当前选中的页签的样式 */
+    background-color: #5a5a5a;
+    color: #ffffff;
+}
+
+/* 页签的鼠标悬停效果 */
+QToolBox::tab:hover {
+    background-color: #e2e2e2;
+    color: #000000;
+}

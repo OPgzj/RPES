@@ -40,7 +40,7 @@ class StereoCamera(object):
             return frame
         else:
             QMessageBox.warning(None, "Warning", f"摄像头连接出错")
-            exit()
+            # exit()
 
 '''
 双目相机类，实现相机的

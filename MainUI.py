@@ -26,6 +26,7 @@ from binoCamera import binoCamera
 from PhenoEx import phenoExtractor
 from phenoData import phenoDatum
 from PCprocess import PointCloudProcess
+import Exceptions
 
 def resource_path(relative_path):
     if getattr(sys, 'frozen', False):  # 是否Bundle Resource
@@ -626,8 +627,15 @@ class Ui_MainWindow(object):
                 self.Cam1St, self.Cam2St= self.bCam.check_binocam()
                 self.changeCamStatus()
             elif (self.Cam1St and self.Cam2St) and self.Cams_opened:  # 已连接相机，更新画面
-                image_left, image_right = self.bCam.get_frames()
-                self.show_binoimg(image_left, image_right)
+                try:
+                    image_left, image_right = self.bCam.get_frames()
+                except Exceptions.FrameLostError as e:
+                        # 错误处理
+                    print(f"Error:{e}")
+                    self.Cam1St, self.Cam2St, self.Cams_opened = False
+                    self.bCam.close()
+                else: 
+                    self.show_binoimg(image_left, image_right)
         if self.scale is not None:
             self.weight = self.scale.get_weight()
             self.scaleNum.setText(str(self.weight))
@@ -680,13 +688,14 @@ class Ui_MainWindow(object):
 
     def open_pointcloud(self, filter="Pointcloud files (*.pcd *.ply)"):
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(None, "点云文件选择", "", filter, options=options)
+        file_name, _ = QFileDialog.getOpenFileName(None, "点云文件选择", "E:\\ricePhenoExt\\pre", filter, options=options)
         return file_name
 
     def open_image(self, filter="Image files (*.png *.jpg *.bmp)"):
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(None, "单目图像选择", "", filter, options=options)
+        file_name, _ = QFileDialog.getOpenFileName(None, "单目图像选择", "E:\\ricePhenoExt\\pre", filter, options=options)
         return file_name
+    
     # 打开双目图像
     def on_open_photo_clicked(self):
         self.Cams_opened = False
@@ -869,26 +878,26 @@ class Ui_MainWindow(object):
             self.correlation.setText(f'{self.data.gdglcm_feature[4]:.5g}')
             self.asm.setText(f'{self.data.gdglcm_feature[5]:.5g}')
             self.complexity.setText(f'{self.data.gdglcm_feature[6]:.5g}')
-            self.avgR.setText(str(self.data.mean_rgb[1][0]))
-            self.priR.setText(str(self.data.mode_rgb[1][0]))
-            self.avgG.setText(str(self.data.mean_rgb[1][1]))
-            self.priG.setText(str(self.data.mode_rgb[1][1]))
-            self.avgB.setText(str(self.data.mean_rgb[1][2]))
-            self.priB.setText(str(self.data.mode_rgb[1][2]))
+            self.avgR.setText(str(f'{self.data.mean_rgb[1][0]:.5g}'))
+            self.priR.setText(str(f'{self.data.mode_rgb[1][0]:.5g}'))
+            self.avgG.setText(str(f'{self.data.mean_rgb[1][1]:.5g}'))
+            self.priG.setText(str(f'{self.data.mode_rgb[1][1]:.5g}'))
+            self.avgB.setText(str(f'{self.data.mean_rgb[1][2]:.5g}'))
+            self.priB.setText(str(f'{self.data.mode_rgb[1][2]:.5g}'))
 
-            self.avgH.setText(str(self.data.mean_hsv[0]))
-            self.priH.setText(str(self.data.mode_rgb[1][0]))
-            self.avgS.setText(str(self.data.mean_rgb[1][1]))
-            self.priS.setText(str(self.data.mode_rgb[1][1]))
-            self.avgV.setText(str(self.data.mean_rgb[1][2]))
-            self.priV.setText(str(self.data.mode_rgb[1][2]))
+            self.avgH.setText(str(f'{self.data.mean_hsv[0]:.3g}'))
+            self.priH.setText(str(f'{self.data.mode_rgb[1][0]:.3g}'))
+            self.avgS.setText(str(f'{self.data.mean_rgb[1][1]:.5g}'))
+            self.priS.setText(str(f'{self.data.mode_rgb[1][1]:.5g}'))
+            self.avgV.setText(str(f'{self.data.mean_rgb[1][2]:.5g}'))
+            self.priV.setText(str(f'{self.data.mode_rgb[1][2]:.5g}'))
 
-            self.avgL.setText(str(self.data.mean_rgb[1][0]))
-            self.priL.setText(str(self.data.mode_rgb[1][0]))
-            self.avg_a.setText(str(self.data.mean_rgb[1][1]))
-            self.pri_a.setText(str(self.data.mode_rgb[1][1]))
-            self.avg_b.setText(str(self.data.mean_rgb[1][2]))
-            self.pri_b.setText(str(self.data.mode_rgb[1][2]))
+            self.avgL.setText(str(f'{self.data.mean_rgb[1][0]:.5g}'))
+            self.priL.setText(str(f'{self.data.mode_rgb[1][0]:.5g}'))
+            self.avg_a.setText(str(f'{self.data.mean_rgb[1][1]:.5g}'))
+            self.pri_a.setText(str(f'{self.data.mode_rgb[1][1]:.5g}'))
+            self.avg_b.setText(str(f'{self.data.mean_rgb[1][2]:.5g}'))
+            self.pri_b.setText(str(f'{self.data.mode_rgb[1][2]:.5g}'))
         if index == 1:
             self.data.type = 1
             # 点云

@@ -1,6 +1,6 @@
 import cv2
 from PySide6.QtWidgets import QMessageBox
-
+import Exceptions
 
 class StereoCamera(object):
     def __init__(self, leftindex=1, rightindex=2):
@@ -10,8 +10,9 @@ class StereoCamera(object):
         self.height = 2048
 
     def is_camera_connected(self, camera_index:int):
+        self.idx = camera_index
         # Attempt to open the camera
-        cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
+        cap = cv2.VideoCapture(self.idx, cv2.CAP_DSHOW)
 
         # Check if the camera was opened successfully
         if cap.isOpened():
@@ -39,7 +40,8 @@ class StereoCamera(object):
             frame = cv2.flip(frame, -1)
             return frame
         else:
-            QMessageBox.warning(None, "Warning", f"摄像头连接出错")
+            QMessageBox.warning(None, "Warning", f"摄像头{self.idx}连接出错")
+            raise Exceptions.CameraNotFoundError(f"Please check camera {self.idx} connection.")
             # exit()
 
 '''
@@ -66,7 +68,17 @@ class binoCamera:
 
     # 获取画面
     def get_frames(self):
-        return self.L_cam.get_fream(),self.R_cam.get_fream()
+        try:
+            left_frame = self.L_cam.get_fream()
+            right_frame = self.R_cam.get_fream()
+        except Exceptions.CameraNotFoundError as e:
+         # 错误处理
+            print(f"Error:{e}")
+            raise Exceptions.FrameLostError()
+        else:
+            return left_frame, right_frame
+
+        
 
     # 关闭摄像头
     def close(self):

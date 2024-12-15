@@ -488,7 +488,7 @@ class Ui_MainWindow(object):
         self.tabindex = 0  # 哪个tabwidget打开了
         self.yolo = None  # 裂纹检测程序
         # 相机连接情况
-        self.bCam = binoCamera()
+        self.bCam = binoCamera(left_index=1,right_index=2)
         self.Cam1St = False
         self.Cam2St = False
         self.Cams_opened = False  # 是否开启相机
